@@ -35,7 +35,6 @@ function getUsuarios(req, res, next) {
     });
 }
 
-
 function getUsuarioById(req, res, next) {
 	const id = Number.parseInt(req.params.id);
 	if (!id || id == 'NaN') 
@@ -65,8 +64,8 @@ function getUsuarioById(req, res, next) {
 	});
 }
 
-
 function saveUsuario(req, res, next) {
+	console.log(JSON.stringify(res.boy));
 	Bookshelf.transaction(function(transaction) {
 		const salt = Bcrypt.genSaltSync(12);
 		const hash = Bcrypt.hashSync(req.body.contraseña, salt);
@@ -146,7 +145,6 @@ function saveUsuario(req, res, next) {
 	});
 }
 
-
 function updateUsuario(req, res, next) {
 	const id = Number.parseInt(req.params.id);
 	if (!id || id == 'NaN') {
@@ -188,7 +186,6 @@ function updateUsuario(req, res, next) {
 	})
 }
 
-
 function deleteUsuario(req, res, next) {
 	const id = Number.parseInt(req.params.id);
 	if (!id || id == 'NaN') {
@@ -228,7 +225,6 @@ function deleteUsuario(req, res, next) {
 	})
 }
 
-
 function singIn(req, res) {
 	Usuario.query(function(qb) { 
 		qb.where('correo', req.body.correo).orWhere('nombre_usuario', req.body.correo);
@@ -261,13 +257,13 @@ function singIn(req, res) {
 		}
 	})
 	.catch(function(err){
+		console.log(err.mensaje);
 		return res.status(500).json({ 
 			error: true, 
 			data: { mensaje: err.message } 
 		});
 	})
 }
-
 
 module.exports = {
 	getUsuarios,
