@@ -1,16 +1,16 @@
 'use strict';
 
-const TipoDietas = require('../collections/tipo_dietas');
-const TipoDieta  = require('../models/tipo_dieta');
+const TipoUnidades = require('../collections/tipo_unidades');
+const TipoUnidad  = require('../models/tipo_unidad');
 
-function getTipoDietas(req, res, next) {
-	TipoDietas.query({})
-	.fetch({ columns: ['id_tipo_dieta', 'nombre', 'fecha_creacion', 'fecha_actualizacion', 'estatus'] })
+function getTipoUnidades(req, res, next) {
+	TipoUnidades.query({})
+	.fetch({ columns: ['id_tipo_unidad', 'nombre', 'fecha_creacion', 'fecha_actualizacion', 'estatus'] })
 	.then(function(data) {
 		if (!data)
 			return res.status(404).json({ 
 				error: true, 
-				data: { mensaje: 'No hay datos registrados' } 
+				data: { mensaje: 'No hay dato registrados' } 
 			});
 
 		return res.status(200).json({
@@ -26,10 +26,10 @@ function getTipoDietas(req, res, next) {
     });
 }
 
-function saveTipoDieta(req, res, next){
+function saveTipoUnidad(req, res, next){
 	console.log(JSON.stringify(req.body));
 
-	TipoDieta.forge({
+	TipoUnidad.forge({
         nombre: req.body.nombre
 	})
 	.save()
@@ -50,7 +50,7 @@ function saveTipoDieta(req, res, next){
 	});
 }
 
-function getTipoDietaById(req, res, next) {
+function getTipoUnidadById(req, res, next) {
 	const id = Number.parseInt(req.params.id);
 	if (!id || id == 'NaN') 
 		return res.status(400).json({ 
@@ -58,7 +58,7 @@ function getTipoDietaById(req, res, next) {
 			data: { mensaje: 'Solicitud incorrecta' } 
 		});
 
-	TipoDieta.forge({ id_tipo_dieta: id, estatus: 1 })
+	TipoUnidad.forge({ id_tipo_unidad: id, estatus: 1 })
 	.fetch()
 	.then(function(data) {
 		if(!data) 
@@ -79,7 +79,7 @@ function getTipoDietaById(req, res, next) {
 	});
 }
 
-function updateTipoDieta(req, res, next) {
+function updateTipoUnidad(req, res, next) {
 	const id = Number.parseInt(req.params.id);
 	if (!id || id == 'NaN') {
 		return res.status(400).json({ 
@@ -88,7 +88,7 @@ function updateTipoDieta(req, res, next) {
 		});
 	}
 
-	TipoDieta.forge({ id_tipo_dieta: id, estatus: 1 })
+	TipoUnidad.forge({ id_tipo_unidad: id, estatus: 1 })
 	.fetch()
 	.then(function(data){
 		if(!data) 
@@ -120,7 +120,7 @@ function updateTipoDieta(req, res, next) {
 	})
 }
 
-function deleteTipoDieta(req, res, next) {
+function deleteTipoUnidad(req, res, next) {
 	const id = Number.parseInt(req.params.id);
 	if (!id || id == 'NaN') {
 		return res.status(400).json({ 
@@ -128,7 +128,7 @@ function deleteTipoDieta(req, res, next) {
 			data: { mensaje: 'Solicitud incorrecta' } 
 		});
 	}
-	TipoDieta.forge({ id_tipo_dieta: id, estatus: 1 })
+	TipoUnidad.forge({ id_tipo_unidad: id, estatus: 1 })
 	.fetch()
 	.then(function(data){
 		if(!data) 
@@ -160,9 +160,9 @@ function deleteTipoDieta(req, res, next) {
 }
 
 module.exports = {
-	getTipoDietas,
-	saveTipoDieta,
-	getTipoDietaById,
-	updateTipoDieta,
-	deleteTipoDieta
+	getTipoUnidades,
+	saveTipoUnidad,
+	getTipoUnidadById,
+	updateTipoUnidad,
+	deleteTipoUnidad
 }

@@ -5,22 +5,30 @@ Informacion sobre el contenido manejado sobre cada rutas de la api-sascha
 # Tabla de contenido 
 * [Host | Port](#host-port)
 * [Modelo Generico](#modelo-generico)
-* [Rutas | Json](#rutas-json)
-    * [Usuarios](#usuarios)
-    * [Servicios](#servicios)
-    * [Dietas](#dietas)
-    * [Tipo Dietas](#tipo_dietas)
-    * [Suplementos](#suplementos)
-    * [Ejercicios](#ejercicios)
+* [Usuarios](#usuarios)
+* [Servicios](#servicios)
+* [Promociones](#promociones)
+* [Dietas](#dietas)
+* [Tipo Dietas](#tipo-dietas)
+* [Tipo Citas](#tipo-citas)
+* [Tipo Criterios](#tipo-criterios)
+* [Tipo Incidencias](#tipo-incidencias)
+* [Tipo Motivos](#tipo-motivos)
+* [Tipo Ordenes](#tipo-ordenes)
+* [Tipo Parametros](#tipo-parametros)
+* [Tipo Respuestas](#tipo-respuestas)
+* [Tipo Unidades](#tipo-unidades)
+* [Tipo Valoraciones](#tipo-valoraciones)
+* [Unidades](#unidades)
+* [Suplementos](#suplementos)
+* [Ejercicios](#ejercicios)
 
 # Host | Port
 
 Local con http://localhost:5000/
 Heroku con http://api-sascha.heroku.com/
 
-# Rutas | Json
-
-## Usuarios
+# Usuarios
 
 ```
  ├──/
@@ -49,7 +57,7 @@ Heroku con http://api-sascha.heroku.com/
     }
 ```
 
-## Servicios
+# Servicios
 
 ```
     ├─GET────/servicios 		* Retorna todos.
@@ -111,7 +119,33 @@ Heroku con http://api-sascha.heroku.com/
     }
 ```
 
-## Dietas
+# Promociones
+
+```
+    ├─GET────/promociones        * Retorna todos.
+    ├─POST───/promociones        * Guarda. 
+    ├─GET────/promocion/:id      * Retorna por id.
+    ├─PUT────/promocion/:id      * Actualiza.
+    ├─DELETE─/promocion/:id      * Elimina.
+    ├─JSON 200
+    ├──{
+    "error": false,
+    "data": [
+        {
+            "id_promocion": 1,
+            "nombre": "",
+            "descripcion": "",
+            "url_imagen": "",
+            "precio": 70,
+            "fecha_creacion": "",
+            "fecha_actualizacion": "",
+            "estatus": 1
+            }
+        ]
+    }
+```
+
+# Dietas
 
 ```
     ├─GET────/dietas         * Retorna todos.
@@ -141,7 +175,7 @@ Heroku con http://api-sascha.heroku.com/
     }
 ```
 
-## Tipo Dietas
+# Tipo Dietas
 
 ```
     ├─GET────/tipodietas         * Retorna todos.
@@ -149,27 +183,120 @@ Heroku con http://api-sascha.heroku.com/
     ├─GET────/tipodieta/:id      * Retorna por id.
     ├─PUT────/tipodieta/:id      * Actualiza.
     ├─DELETE─/tipodieta/:id      * Elimina.
-    ├─JSON 200
-    ├──{
-    "error": false,
-    "data": [
-        {
-            "id_tipo_dieta": 1,
-            "nombre": "tipo dieta",
-            "fecha_creacion": "2018-04-02T04:00:00.000Z",
-            "fecha_actualizacion": "2018-05-02T04:00:00.000Z",
-            "estatus": 1
-        },
-        {
-            "id_tipo_dieta": 2,
-            "nombre": "dieta1",
-            "fecha_creacion": "2018-04-22T03:56:32.238Z",
-            "fecha_actualizacion": "2018-04-22T03:56:32.238Z",
-            "estatus": 1
-        }
-    ]}
 ```
-## Suplemento
+[[ver json]](https://api-sascha.herokuapp.com/tipodietas)
+
+# Tipo Citas
+
+```
+    ├─GET────/tipocitas         * Retorna todos.
+    ├─POST───/tipocitas         * Guarda. 
+    ├─GET────/tipocita/:id      * Retorna por id.
+    ├─PUT────/tipocita/:id      * Actualiza.
+    ├─DELETE─/tipocita/:id      * Elimina.
+```
+[[ver json]](https://api-sascha.herokuapp.com/tipocitas)
+
+# Tipo Criterios
+
+```
+    ├─GET────/tipocriterios         * Retorna todos.
+    ├─POST───/tipocriterios         * Guarda. 
+    ├─GET────/tipocriterio/:id      * Retorna por id.
+    ├─PUT────/tipocriterio/:id      * Actualiza.
+    ├─DELETE─/tipocriterio/:id      * Elimina.
+```
+[[ver json]](https://api-sascha.herokuapp.com/tipocriterios)
+
+# Tipo Incidencias
+
+```
+    ├─GET────/tipoincidencias         * Retorna todos.
+    ├─POST───/tipoincidencias         * Guarda. 
+    ├─GET────/tipoincidencia/:id      * Retorna por id.
+    ├─PUT────/tipoincidencia/:id      * Actualiza.
+    ├─DELETE─/tipoincidencia/:id      * Elimina.
+```
+[[ver json]](https://api-sascha.herokuapp.com/tipoincidencias)
+
+# Tipo Motivos
+
+```
+    ├─GET────/tipomotivos         * Retorna todos.
+    ├─POST───/tipomotivos         * Guarda. 
+    ├─GET────/tipomotivo/:id      * Retorna por id.
+    ├─PUT────/tipomotivo/:id      * Actualiza.
+    ├─DELETE─/tipomotivo/:id      * Elimina.
+```
+[[ver json]](https://api-sascha.herokuapp.com/tipomotivos)
+
+# Tipo Ordenes
+
+```
+    ├─GET────/tipoordenes         * Retorna todos.
+    ├─POST───/tipoordenes         * Guarda. 
+    ├─GET────/tipoorden/:id       * Retorna por id.
+    ├─PUT────/tipoorden/:id       * Actualiza.
+    ├─DELETE─/tipoorden/:id       * Elimina.
+```
+[[ver json]](https://api-sascha.herokuapp.com/tipoordenes)
+
+# Tipo Parametros
+
+```
+    ├─GET────/tipoparametros       * Retorna todos.
+    ├─POST───/tipoparametros       * Guarda. 
+    ├─GET────/tipoparametro/:id    * Retorna por id.
+    ├─PUT────/tipoparametro/:id    * Actualiza.
+    ├─DELETE─/tipoparametro/:id    * Elimina.
+```
+[[ver json]](https://api-sascha.herokuapp.com/tipoparametros)
+
+# Tipo Respuestas
+
+```
+    ├─GET────/tiporespuestas       * Retorna todos.
+    ├─POST───/tiporespuestas       * Guarda. 
+    ├─GET────/tiporespuesta/:id    * Retorna por id.
+    ├─PUT────/tiporespuesta/:id    * Actualiza.
+    ├─DELETE─/tiporespuesta/:id    * Elimina.
+```
+[[ver json]](https://api-sascha.herokuapp.com/tiporespuestas)
+
+# Tipo Unidades
+
+```
+    ├─GET────/tipounidades        * Retorna todos.
+    ├─POST───/tipounidades        * Guarda. 
+    ├─GET────/tipounidad/:id      * Retorna por id.
+    ├─PUT────/tipounidad/:id      * Actualiza.
+    ├─DELETE─/tipounidad/:id      * Elimina.
+```
+[[ver json]](https://api-sascha.herokuapp.com/tipounidades)
+
+# Tipo Valoraciones
+
+```
+    ├─GET────/tipovaloraciones     * Retorna todos.
+    ├─POST───/tipovaloraciones     * Guarda. 
+    ├─GET────/tipovaloracion/:id   * Retorna por id.
+    ├─PUT────/tipovaloracion/:id   * Actualiza.
+    ├─DELETE─/tipovaloracion/:id   * Elimina.
+```
+[[ver json]](https://api-sascha.herokuapp.com/tipovaloraciones)
+
+# Unidades
+
+```
+    ├─GET────/unidades        * Retorna todos.
+    ├─POST───/unidades        * Guarda. 
+    ├─GET────/unidad/:id      * Retorna por id.
+    ├─PUT────/unidad/:id      * Actualiza.
+    ├─DELETE─/unidad/:id      * Elimina.
+```
+[[ver json]](https://api-sascha.herokuapp.com/unidades)
+
+# Suplementos
 
 ```
     ├─GET────/suplementos         * Retorna todos.
@@ -183,7 +310,7 @@ Heroku con http://api-sascha.heroku.com/
     }
 ```
 
-## Ejercicio
+# Ejercicio
 
 ```
     ├─GET────/ejercicios         * Retorna todos.
@@ -201,7 +328,7 @@ Heroku con http://api-sascha.heroku.com/
     ]}
 ```
 
-## Modelo Generico
+# Modelo Generico
 
 ```
     ├─GET────/objeto          * Retorna todos.

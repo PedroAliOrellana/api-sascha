@@ -3,11 +3,14 @@
 const Servicios = require('../collections/servicios');
 const Servicio  = require('../models/servicio');
 
-function getServicios(req, res, next) {
-	Servicios.query(function (q) {
-        q
+async function getServicios(req, res, next) {
+	await Servicios.query(function (q) {
+        q.distinct()
          .innerJoin('plan_dieta', function () {
                 this.on('servicio.id_plan_dieta', '=', 'plan_dieta.id_plan_dieta');
+            })
+         .innerJoin('tipo_dieta', function () {
+                this.on('tipo_dieta.id_tipo_dieta', '=', 'plan_dieta.id_tipo_dieta');
             })
          .innerJoin('plan_ejercicio', function () {
                 this.on('servicio.id_plan_ejercicio', '=', 'plan_ejercicio.id_plan_ejercicio');
@@ -17,16 +20,16 @@ function getServicios(req, res, next) {
             });
 	})
 	.fetch({ withRelated: ['plan_dieta', 'plan_dieta.tipo_dieta','plan_ejercicio', 'plan_suplemento'] })
-	.then(function(servicios) {
+	.then(function(data) {
 		//console.log(servicios.at(0).related('plan_dieta'));
-		if (!servicios)
+		if (!data)
 			return res.status(404).json({ 
 				error: true, 
 				data: { mensaje: 'No hay servicios registrados' } 
 			});
 		return res.status(200).json({
 			error: false,
-			data: servicios
+			data: data
 		});
 	})
 	.catch(function (err) {
@@ -47,15 +50,15 @@ function getServicioById(req, res, next) {
 
 	Servicio.forge({ id_servicio: id, estatus: 1 })
 	.fetch()
-	.then(function(servicio) {
-		if(!servicio) 
+	.then(function(data) {
+		if(!data) 
 			return res.status(404).json({ 
 				error: true, 
 				data: { mensaje: 'Servicio no encontrado' } 
 			});
 		return res.status(200).json({ 
 			error : false, 
-			data : servicio 
+			data : data
 		});
 	})
 	.catch(function(err){
@@ -78,7 +81,7 @@ function saveServicio(req, res, next){
         numero_visita: req.body.numero_visita
 	})
 	.save()
-	.then(function(servicio){
+	.then(function(data){
 		res.status(200).json({
 			error: false,
 			data: [{

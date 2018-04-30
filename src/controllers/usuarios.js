@@ -3,14 +3,18 @@
 const Usuario       = require('../models/usuario');
 const Usuarios      = require('../collections/usuarios');
 const Cliente       = require('../models/cliente');
+const ViewCliente   = require('../models/v_cliente');
+const correoTemplate = require('../views/correoTemplate');
 const Bookshelf     = require('../commons/bookshelf');
 const Bcrypt        = require("bcrypt");
 const Crypto        = require("crypto");
 const nodemailer    = require('nodemailer');
 const service       = require("../services");
-const MAIL_SERVICE  = process.env.MAIL_SERVICE || 'gmail';
-const MAIL_USER     = process.env.MAIL_USER    || 'test.joseguerrero@gmail.com';
-const MAIL_PASS     = process.env.MAIL_PASS    || '1234jose5678';
+const MAIL_SERVICE       = process.env.MAIL_SERVICE       || 'gmail';
+const MAIL_USER          = process.env.MAIL_USER          || 'SaschaNutric@gmail.com';
+const MAIL_CLIENT_ID     = process.env.MAIL_CLIENT_ID     || '';
+const MAIL_CLIENT_SECRET = process.env.MAIL_CLIENT_SECRET || '';
+const REFRESH_TOKEN      = process.env.REFRESH_TOKEN      || '';
 
 function getUsuarios(req, res, next) {
 	Usuarios.query({ where: { estatus: 1 } })
@@ -97,10 +101,13 @@ function saveUsuario(req, res, next) {
 			.then(function(cliente) {		
 
 				const transportador = nodemailer.createTransport({
-					service: MAIL_SERVICE,
+					host: 'smtp.gmail.com',
 					auth: {
-						user: MAIL_USER,
-						pass: MAIL_PASS
+						type: 'OAuth2',
+						user:         MAIL_USER,
+						clientId:     MAIL_CLIENT_ID,
+						clientSecret: MAIL_CLIENT_SECRET,
+						refreshToken: REFRESH_TOKEN
 					}
 				});
 
@@ -108,11 +115,10 @@ function saveUsuario(req, res, next) {
 					from: MAIL_USER,
 					to: usuario.get('correo'),
 					subject: 'Confirmación de Suscripción',
-					html: `
-						<h1>Bienvenido a Sascha Nutric ${cliente.get('nombres')} ${cliente.get('apellidos')}<h1>
-						<p>Acceso: ${usuario.get('correo')} o ${usuario.get('nombre_usuario')}</p>
-						<p>Contraseña: ${req.body.contraseña}</p>
-					`
+					html: correoTemplate(`${cliente.get('nombres')} ${cliente.get('apellidos')}`, 
+										usuario.get('nombre_usuario'),
+										usuario.get('correo'),
+										req.body.contraseña)
 				}
 				
 				transportador.sendMail(opcionesCorreo)
@@ -226,8 +232,15 @@ function deleteUsuario(req, res, next) {
 }
 
 function singIn(req, res) {
+	if(!req.body.correo && !req.body.nombre_usuario)
+		return res.status(400).json({ error: true, data: { mensaje: 'Faltan parametros en el body' } });
+	
+	let credenciales = {
+		correo: req.body.correo ? req.body.correo.toLowerCase() : null,
+		nombre_usuario: req.body.nombre_usuario ? req.body.nombre_usuario.toLowerCase() : null
+	}
 	Usuario.query(function(qb) { 
-		qb.where('correo', req.body.correo).orWhere('nombre_usuario', req.body.correo);
+		qb.where('correo', credenciales.correo).orWhere('nombre_usuario', credenciales.nombre_usuario);
 		qb.where('estatus', 1); 
 	})
 	.fetch()
@@ -240,13 +253,31 @@ function singIn(req, res) {
         
         const esContrasenia = Bcrypt.compareSync(req.body.contraseña, usuario.get('contrasenia'));
 		if(esContrasenia) {
-			const data = { 
-				mensaje: 'Inicio de sesión exitoso',
-				token: service.createToken(usuario)
-			}
-			return res.status(200).json({ 
-				error: false, 
-				data: data
+			ViewCliente.forge({ id_usuario: usuario.get('id_usuario') })
+			.fetch({ columns: ['id_cliente', 'cedula', 'nombres', 'apellidos', 
+								'telefono', 'genero', 'estado_civil', 'direccion', 
+								'fecha_nacimiento', 'tipo_cliente', 'estado', 'rango_edad'] })
+			.then(function(cliente) {
+				if(!cliente) 
+					return res.status(404).json({ 
+						error: true, 
+						data: { mensaje: 'Cliente no encontrado' } 
+					});
+				const data = { 
+					mensaje: 'Inicio de sesión exitoso',
+					token: service.createToken(usuario),
+					cliente: cliente
+				}
+				return res.status(200).json({ 
+					error: false, 
+					data: data
+				});
+			})
+			.catch(function(err){
+				return res.status(500).json({ 
+					error: false, 
+					data: { mensaje: err.message } 
+				})
 			});
 		}
 		else {

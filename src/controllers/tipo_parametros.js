@@ -1,11 +1,11 @@
 'use strict';
 
-const TipoDietas = require('../collections/tipo_dietas');
-const TipoDieta  = require('../models/tipo_dieta');
+const TipoParametros = require('../collections/tipo_parametros');
+const TipoParametro  = require('../models/tipo_parametro');
 
-function getTipoDietas(req, res, next) {
-	TipoDietas.query({})
-	.fetch({ columns: ['id_tipo_dieta', 'nombre', 'fecha_creacion', 'fecha_actualizacion', 'estatus'] })
+function getTipoParametros(req, res, next) {
+	TipoParametros.query({})
+	.fetch({ columns: ['id_tipo_parametro', 'nombre', 'fecha_creacion', 'fecha_actualizacion', 'estatus'] })
 	.then(function(data) {
 		if (!data)
 			return res.status(404).json({ 
@@ -26,10 +26,10 @@ function getTipoDietas(req, res, next) {
     });
 }
 
-function saveTipoDieta(req, res, next){
+function saveTipoParametro(req, res, next){
 	console.log(JSON.stringify(req.body));
 
-	TipoDieta.forge({
+	TipoParametro.forge({
         nombre: req.body.nombre
 	})
 	.save()
@@ -50,7 +50,7 @@ function saveTipoDieta(req, res, next){
 	});
 }
 
-function getTipoDietaById(req, res, next) {
+function getTipoParametroById(req, res, next) {
 	const id = Number.parseInt(req.params.id);
 	if (!id || id == 'NaN') 
 		return res.status(400).json({ 
@@ -58,13 +58,13 @@ function getTipoDietaById(req, res, next) {
 			data: { mensaje: 'Solicitud incorrecta' } 
 		});
 
-	TipoDieta.forge({ id_tipo_dieta: id, estatus: 1 })
+	TipoParametro.forge({ id_tipo_parametro: id, estatus: 1 })
 	.fetch()
 	.then(function(data) {
 		if(!data) 
 			return res.status(404).json({ 
 				error: true, 
-				data: { mensaje: 'dato no encontrado' } 
+				data: { mensaje: 'Dato no encontrado' } 
 			});
 		return res.status(200).json({ 
 			error : false, 
@@ -79,7 +79,7 @@ function getTipoDietaById(req, res, next) {
 	});
 }
 
-function updateTipoDieta(req, res, next) {
+function updateTipoParametro(req, res, next) {
 	const id = Number.parseInt(req.params.id);
 	if (!id || id == 'NaN') {
 		return res.status(400).json({ 
@@ -88,7 +88,7 @@ function updateTipoDieta(req, res, next) {
 		});
 	}
 
-	TipoDieta.forge({ id_tipo_dieta: id, estatus: 1 })
+	TipoParametro.forge({ id_tipo_parametro: id, estatus: 1 })
 	.fetch()
 	.then(function(data){
 		if(!data) 
@@ -120,7 +120,7 @@ function updateTipoDieta(req, res, next) {
 	})
 }
 
-function deleteTipoDieta(req, res, next) {
+function deleteTipoParametro(req, res, next) {
 	const id = Number.parseInt(req.params.id);
 	if (!id || id == 'NaN') {
 		return res.status(400).json({ 
@@ -128,7 +128,7 @@ function deleteTipoDieta(req, res, next) {
 			data: { mensaje: 'Solicitud incorrecta' } 
 		});
 	}
-	TipoDieta.forge({ id_tipo_dieta: id, estatus: 1 })
+	TipoParametro.forge({ id_tipo_parametro: id, estatus: 1 })
 	.fetch()
 	.then(function(data){
 		if(!data) 
@@ -160,9 +160,9 @@ function deleteTipoDieta(req, res, next) {
 }
 
 module.exports = {
-	getTipoDietas,
-	saveTipoDieta,
-	getTipoDietaById,
-	updateTipoDieta,
-	deleteTipoDieta
+	getTipoParametros,
+	saveTipoParametro,
+	getTipoParametroById,
+	updateTipoParametro,
+	deleteTipoParametro
 }
